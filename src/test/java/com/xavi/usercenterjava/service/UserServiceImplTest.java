@@ -1,5 +1,6 @@
 package com.xavi.usercenterjava.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xavi.usercenterjava.model.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -16,14 +17,18 @@ class UserServiceImplTest {
 
     @Test
     void userRegister() {
+
         String userAccount = "xavi";
         String userPassword = "1234567890";
         String checkPassword = "1234567890";
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_account",userAccount);
+        userService.remove(queryWrapper);
         long result = userService.userRegister(userAccount,userPassword,checkPassword,0);
         Assertions.assertEquals(1,result);
         userAccount = "yu";
         result = userService.userRegister(userAccount,userPassword,checkPassword,0);
-        Assertions.assertEquals(1,result);
+        Assertions.assertEquals(-1,result);
     }
     @Resource
     public UserService userService;
