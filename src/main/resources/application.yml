@@ -1,1 +1,11 @@
-
+spring:
+  application:
+    name: user-center
+  # DataSource Config
+  datasource:
+    password: root
+    url: jdbc:mysql://localhost:3306/xaviusercenter
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+server:
+  port: 8080
