@@ -3,6 +3,7 @@ import java.util.Date;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.xavi.usercenterjava.constant.UserConstant;
 import com.xavi.usercenterjava.model.User;
 import com.xavi.usercenterjava.service.UserService;
 import com.xavi.usercenterjava.mapper.UserMapper;
@@ -29,9 +30,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     /**
      * 盐值
      */
-    private static final String SALT = "MessiIsGoat";
 
-    public static final String USER_LOGIN_STATE = "userLoginState";
     @Override
     public long userRegister(String userAccount, String userPassword, String checkPassword) {
         //1. 校验
@@ -59,7 +58,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             return -1;//TODO 异常处理
         }
         //2. 加密
-        String encryptPassword = DigestUtils.md5DigestAsHex((SALT + userPassword).getBytes());
+        String encryptPassword = DigestUtils.md5DigestAsHex((UserConstant.SALT + userPassword).getBytes());
         //3. 插入数据
         User user = new User();
         user.setUserAccount(userAccount);
@@ -92,7 +91,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             return null;//TODO 异常处理
         }
         //2. 加密
-        String encryptPassword = DigestUtils.md5DigestAsHex((SALT + userPassword).getBytes());
+        String encryptPassword = DigestUtils.md5DigestAsHex((UserConstant.SALT + userPassword).getBytes());
         //3. 校验用户是否存在
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("user_account",userAccount);
@@ -114,8 +113,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         safetyUser.setEmail(user.getEmail());
         safetyUser.setUserStatus(user.getUserStatus());
         safetyUser.setCreateTime(user.getCreateTime());
+        safetyUser.setUserRole(user.getUserRole());
         //4. 记录用户信息
-        httpServletRequest.getSession().setAttribute(USER_LOGIN_STATE,safetyUser);
+        httpServletRequest.getSession().setAttribute(UserConstant.USER_LOGIN_STATE,safetyUser);
         return safetyUser;
     }
 }
