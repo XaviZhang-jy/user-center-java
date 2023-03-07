@@ -1,5 +1,4 @@
 package com.xavi.usercenterjava.service.impl;
-import java.util.Date;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -103,6 +102,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             return null;//TODO 异常处理
         }
         //3. 数据脱敏
+        User safetyUser = getSafetyUser(user);
+        //4. 记录用户信息
+        httpServletRequest.getSession().setAttribute(UserConstant.USER_LOGIN_STATE,safetyUser);
+        return safetyUser;
+    }
+
+    @Override
+    public User getSafetyUser(User user){
         User safetyUser = new User();
         safetyUser.setUserId(user.getUserId());
         safetyUser.setUserName(user.getUserName());
@@ -114,8 +121,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         safetyUser.setUserStatus(user.getUserStatus());
         safetyUser.setCreateTime(user.getCreateTime());
         safetyUser.setUserRole(user.getUserRole());
-        //4. 记录用户信息
-        httpServletRequest.getSession().setAttribute(UserConstant.USER_LOGIN_STATE,safetyUser);
         return safetyUser;
     }
 }

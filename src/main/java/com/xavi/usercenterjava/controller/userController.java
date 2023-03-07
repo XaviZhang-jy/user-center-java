@@ -13,6 +13,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/user")
@@ -70,7 +71,9 @@ public class userController {
         if(!StringUtils.isBlank(username)){
             queryWrapper.like("user_name",username);
         }
-        return userService.list(queryWrapper);
+        List<User> lists = userService.list(queryWrapper);
+        return lists.stream().map(user -> userService.getSafetyUser(user)
+        ).collect(Collectors.toList());
     }
 
     /**
