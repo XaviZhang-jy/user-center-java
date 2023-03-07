@@ -14,6 +14,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @RunWith(SpringRunner.class)
 class UserServiceImplTest {
+    @Resource
+    private UserService userService;
 
     @Test
     void userRegister() {
@@ -24,14 +26,12 @@ class UserServiceImplTest {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("user_account",userAccount);
         userService.remove(queryWrapper);
-        long result = userService.userRegister(userAccount,userPassword,checkPassword,0);
+        long result = userService.userRegister(userAccount,userPassword,checkPassword);
         Assertions.assertEquals(1,result);
         userAccount = "yu";
-        result = userService.userRegister(userAccount,userPassword,checkPassword,0);
+        result = userService.userRegister(userAccount,userPassword,checkPassword);
         Assertions.assertEquals(-1,result);
     }
-    @Resource
-    public UserService userService;
     @Test
     public void testAddUser(){
         User user = new User();
@@ -45,8 +45,6 @@ class UserServiceImplTest {
         boolean result = userService.save(user);
         System.out.println(user.getUserId());
         Assertions.assertTrue(result);
-        if(result){
-            userService.removeById(user.getUserId());
-        }
+        userService.removeById(user.getUserId());
     }
 }

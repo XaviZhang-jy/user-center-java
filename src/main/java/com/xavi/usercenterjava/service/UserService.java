@@ -2,6 +2,9 @@ package com.xavi.usercenterjava.service;
 
 import com.xavi.usercenterjava.model.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.http.HttpRequest;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Xavi
@@ -16,7 +19,16 @@ public interface UserService extends IService<User> {
      * @param userAccount 用户账户
      * @param userPassword 用户密码
      * @param checkPassword 校验密码
-     * @return
+     * @return 状态值
      */
-    long userRegister(String userAccount,String userPassword,String checkPassword,int gender);
+    long userRegister(String userAccount,String userPassword,String checkPassword);
+
+    /**
+     * 用户登录
+     *
+     * @param userAccount 用户账户
+     * @param userPassword 用户密码
+     * @return 用户信息
+     */
+    User doLogin(String userAccount, String userPassword, HttpServletRequest httpServletRequest);
 }
